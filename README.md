@@ -626,4 +626,3 @@ The system includes health checks for all services. Unhealthy services will be a
 ## Food Database
 
 The system includes a curated database of 40+ staple foods with nutritional information per 100g, including calories, protein, fat, carbohydrates, and dietary tags.
-# MCP-Based-Diet-App
