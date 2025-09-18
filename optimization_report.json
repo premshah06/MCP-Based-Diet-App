@@ -1,0 +1,32 @@
+{
+  "optimization_timestamp": "2025-08-31T22:37:23.918704",
+  "project_structure": {
+    "apps": 22846,
+    "docker": 3
+  },
+  "file_sizes": [],
+  "dependency_analysis": {
+    "frontend": {
+      "dependencies": 14,
+      "devDependencies": 15
+    },
+    "backend": {
+      "requirements": 5
+    },
+    "ml": {
+      "requirements": 10
+    }
+  },
+  "recommendations": [
+    "Use CDN for static assets in production",
+    "Implement gzip compression for API responses",
+    "Add database connection pooling if using database",
+    "Consider implementing Redis caching for frequent API calls",
+    "Use Nginx as reverse proxy in production",
+    "Implement proper logging and monitoring",
+    "Add rate limiting to API endpoints",
+    "Use environment-specific configuration files",
+    "Implement automated testing pipeline",
+    "Add performance monitoring and alerts"
+  ]
+}

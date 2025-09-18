@@ -1,0 +1,136 @@
+networks:
+  diet-network:
+    driver: bridge
+
+services:
+  # Frontend Service
+  diet-frontend:
+    build:
+      context: ../apps/diet-frontend
+      dockerfile: Dockerfile
+    container_name: diet-frontend
+    ports:
+      - "0.0.0.0:3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ../foods.json:/usr/share/nginx/html/foods.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - diet-network
+    depends_on:
+      diet-api:
+        condition: service_healthy
+
+  diet-api:
+    build:
+      context: ../apps/diet-api
+      dockerfile: Dockerfile
+    container_name: diet-api
+    ports:
+      - "0.0.0.0:8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - OLLAMA_URL=http://ollama:11434
+    volumes:
+      - ../foods.json:/app/foods.json:ro
+    networks:
+      - diet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      - ollama
+
+  diet-mcp:
+    build:
+      context: ../apps/diet-mcp
+      dockerfile: Dockerfile
+    container_name: diet-mcp
+    environment:
+      - DIET_API_URL=http://diet-api:8000
+    volumes:
+      - ../foods.json:/app/foods.json:ro
+    networks:
+      - diet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      diet-api:
+        condition: service_healthy
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "0.0.0.0:11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - diet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    # GPU support (uncomment if you have NVIDIA GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # Model initialization container - pulls a small free model
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: ollama-init
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - diet-network
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: ["/bin/bash"]
+    command: >
+      -c "
+        echo 'Setting OLLAMA_HOST...' &&
+        export OLLAMA_HOST=http://ollama:11434 &&
+        echo 'Waiting for OLLAMA service...' &&
+        sleep 10 &&
+        echo 'Pulling phi3:mini model (lightweight and fast)...' &&
+        ollama pull phi3:mini &&
+        echo 'Model phi3:mini successfully pulled!' &&
+        echo 'Testing model...' &&
+        echo 'What is protein?' | ollama run phi3:mini --format json ||
+        echo 'Model pull completed (may need manual verification)'
+      "
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+
+volumes:
+  ollama-data:
+    driver: local

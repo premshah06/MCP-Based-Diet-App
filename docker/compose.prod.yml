@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  diet-frontend:
+    build:
+      context: ../apps/diet-frontend
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  diet-api:
+    build:
+      context: ../apps/diet-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  diet-mcp:
+    build:
+      context: ../apps/diet-mcp
+      dockerfile: Dockerfile
+    environment:
+      - DIET_API_URL=http://diet-api:8000
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    depends_on:
+      - diet-api
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  app_data:
+    driver: local

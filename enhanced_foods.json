@@ -1,0 +1,1838 @@
+{
+  "foods": [
+    {
+      "id": "chicken_breast_grilled",
+      "name": "Grilled Chicken Breast",
+      "per_100g": {
+        "calories": 165,
+        "protein": 31.0,
+        "fat": 3.6,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "non_veg",
+        "halal",
+        "high_protein",
+        "lean"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 15,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.752,
+        "fat_ratio": 0.196,
+        "carb_ratio": 0.0,
+        "protein_density": 0.1879,
+        "fiber_density": 0.0,
+        "satiety_index": 15.12,
+        "diet_scores": {
+          "keto": 0.36,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.3
+    },
+    {
+      "id": "salmon_wild",
+      "name": "Wild Atlantic Salmon",
+      "per_100g": {
+        "calories": 208,
+        "protein": 25.4,
+        "fat": 12.4,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "non_veg",
+        "omega3",
+        "high_protein"
+      ],
+      "cost_level": "high",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 20,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.488,
+        "fat_ratio": 0.537,
+        "carb_ratio": 0.0,
+        "protein_density": 0.1221,
+        "fiber_density": 0.0,
+        "satiety_index": 14.64,
+        "diet_scores": {
+          "keto": 0.52,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.3
+    },
+    {
+      "id": "turkey_lean",
+      "name": "Lean Ground Turkey",
+      "per_100g": {
+        "calories": 135,
+        "protein": 30.1,
+        "fat": 0.7,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "non_veg",
+        "halal",
+        "high_protein",
+        "lean"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 12,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.892,
+        "fat_ratio": 0.047,
+        "carb_ratio": 0.0,
+        "protein_density": 0.223,
+        "fiber_density": 0.0,
+        "satiety_index": 14.18,
+        "diet_scores": {
+          "keto": 0.3,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.3
+    },
+    {
+      "id": "cod_atlantic",
+      "name": "Atlantic Cod Fillet",
+      "per_100g": {
+        "calories": 82,
+        "protein": 18.0,
+        "fat": 0.7,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "non_veg",
+        "lean",
+        "high_protein"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 15,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.878,
+        "fat_ratio": 0.077,
+        "carb_ratio": 0.0,
+        "protein_density": 0.2195,
+        "fiber_density": 0.0,
+        "satiety_index": 9.34,
+        "diet_scores": {
+          "keto": 0.32,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.3
+    },
+    {
+      "id": "tuna_fresh",
+      "name": "Fresh Tuna Steak",
+      "per_100g": {
+        "calories": 144,
+        "protein": 25.0,
+        "fat": 4.9,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "non_veg",
+        "high_protein",
+        "omega3"
+      ],
+      "cost_level": "high",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 10,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.694,
+        "fat_ratio": 0.306,
+        "carb_ratio": 0.0,
+        "protein_density": 0.1736,
+        "fiber_density": 0.0,
+        "satiety_index": 12.98,
+        "diet_scores": {
+          "keto": 0.42,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.3
+    },
+    {
+      "id": "tofu_extra_firm",
+      "name": "Extra Firm Tofu",
+      "per_100g": {
+        "calories": 144,
+        "protein": 17.3,
+        "fat": 8.7,
+        "carbs": 2.8,
+        "fiber": 2.3,
+        "sugar": 0.6
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "soy",
+        "high_protein"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 10,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.481,
+        "fat_ratio": 0.544,
+        "carb_ratio": 0.078,
+        "protein_density": 0.1201,
+        "fiber_density": 0.016,
+        "satiety_index": 11.07,
+        "diet_scores": {
+          "keto": 0.52,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [
+        "soy"
+      ],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "tempeh_organic",
+      "name": "Organic Tempeh",
+      "per_100g": {
+        "calories": 190,
+        "protein": 20.3,
+        "fat": 10.8,
+        "carbs": 7.6,
+        "fiber": 9.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "fermented",
+        "high_protein"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 15,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.427,
+        "fat_ratio": 0.512,
+        "carb_ratio": 0.16,
+        "protein_density": 0.1068,
+        "fiber_density": 0.0474,
+        "satiety_index": 14.22,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "seitan_homemade",
+      "name": "Homemade Seitan",
+      "per_100g": {
+        "calories": 370,
+        "protein": 75.2,
+        "fat": 1.9,
+        "carbs": 14.2,
+        "fiber": 1.9,
+        "sugar": 0.0
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "wheat",
+        "very_high_protein"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 60,
+      "difficulty": "hard",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.813,
+        "fat_ratio": 0.046,
+        "carb_ratio": 0.154,
+        "protein_density": 0.2032,
+        "fiber_density": 0.0051,
+        "satiety_index": 31.61,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [
+        "gluten"
+      ],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "lentils_red_cooked",
+      "name": "Red Lentils (cooked)",
+      "per_100g": {
+        "calories": 116,
+        "protein": 9.0,
+        "fat": 0.4,
+        "carbs": 20.1,
+        "fiber": 7.9,
+        "sugar": 1.8
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "legume",
+        "high_fiber"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 20,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.31,
+        "fat_ratio": 0.031,
+        "carb_ratio": 0.693,
+        "protein_density": 0.0776,
+        "fiber_density": 0.0681,
+        "satiety_index": 6.05,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "chickpeas_roasted",
+      "name": "Roasted Chickpeas",
+      "per_100g": {
+        "calories": 164,
+        "protein": 8.9,
+        "fat": 2.6,
+        "carbs": 27.4,
+        "fiber": 7.6,
+        "sugar": 4.8
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "legume",
+        "snack"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "snack",
+        "lunch"
+      ],
+      "preparation_time": 45,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.217,
+        "fat_ratio": 0.143,
+        "carb_ratio": 0.668,
+        "protein_density": 0.0543,
+        "fiber_density": 0.0463,
+        "satiety_index": 6.36,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "black_beans_organic",
+      "name": "Organic Black Beans",
+      "per_100g": {
+        "calories": 132,
+        "protein": 8.9,
+        "fat": 0.5,
+        "carbs": 23.7,
+        "fiber": 8.7,
+        "sugar": 0.3
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "legume",
+        "high_fiber"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 25,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.27,
+        "fat_ratio": 0.034,
+        "carb_ratio": 0.718,
+        "protein_density": 0.0674,
+        "fiber_density": 0.0659,
+        "satiety_index": 6.27,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "eggs_pasture_raised",
+      "name": "Pasture-Raised Eggs",
+      "per_100g": {
+        "calories": 155,
+        "protein": 13.0,
+        "fat": 11.0,
+        "carbs": 1.1,
+        "fiber": 0.0,
+        "sugar": 1.1
+      },
+      "tags": [
+        "veg",
+        "high_protein",
+        "omega3"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 5,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.335,
+        "fat_ratio": 0.639,
+        "carb_ratio": 0.028,
+        "protein_density": 0.0839,
+        "fiber_density": 0.0,
+        "satiety_index": 9.29,
+        "diet_scores": {
+          "keto": 0.55,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.7
+    },
+    {
+      "id": "greek_yogurt_plain",
+      "name": "Plain Greek Yogurt (0% fat)",
+      "per_100g": {
+        "calories": 59,
+        "protein": 10.3,
+        "fat": 0.4,
+        "carbs": 3.6,
+        "fiber": 0.0,
+        "sugar": 3.2
+      },
+      "tags": [
+        "veg",
+        "probiotic",
+        "high_protein"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "breakfast",
+        "snack"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.698,
+        "fat_ratio": 0.061,
+        "carb_ratio": 0.244,
+        "protein_density": 0.1746,
+        "fiber_density": 0.0,
+        "satiety_index": 5.84,
+        "diet_scores": {
+          "keto": 0.25,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [
+        "dairy"
+      ],
+      "environmental_score": 0.7
+    },
+    {
+      "id": "quinoa_tricolor",
+      "name": "Tricolor Quinoa (cooked)",
+      "per_100g": {
+        "calories": 120,
+        "protein": 4.4,
+        "fat": 1.9,
+        "carbs": 21.8,
+        "fiber": 2.8,
+        "sugar": 0.9
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "gluten_free",
+        "complete_protein"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 15,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.147,
+        "fat_ratio": 0.142,
+        "carb_ratio": 0.727,
+        "protein_density": 0.0367,
+        "fiber_density": 0.0233,
+        "satiety_index": 2.98,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "brown_rice_short_grain",
+      "name": "Short Grain Brown Rice",
+      "per_100g": {
+        "calories": 111,
+        "protein": 2.6,
+        "fat": 0.9,
+        "carbs": 22.0,
+        "fiber": 1.8,
+        "sugar": 0.4
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "whole_grain"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 45,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.094,
+        "fat_ratio": 0.073,
+        "carb_ratio": 0.793,
+        "protein_density": 0.0234,
+        "fiber_density": 0.0162,
+        "satiety_index": 1.76,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "oats_steel_cut",
+      "name": "Steel Cut Oats (dry)",
+      "per_100g": {
+        "calories": 389,
+        "protein": 16.9,
+        "fat": 6.9,
+        "carbs": 66.3,
+        "fiber": 10.6,
+        "sugar": 1.1
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "whole_grain",
+        "high_fiber"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "breakfast"
+      ],
+      "preparation_time": 30,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.174,
+        "fat_ratio": 0.16,
+        "carb_ratio": 0.682,
+        "protein_density": 0.0434,
+        "fiber_density": 0.0272,
+        "satiety_index": 11.32,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "sweet_potato_orange",
+      "name": "Orange Sweet Potato (baked)",
+      "per_100g": {
+        "calories": 90,
+        "protein": 2.0,
+        "fat": 0.2,
+        "carbs": 20.7,
+        "fiber": 3.3,
+        "sugar": 6.8
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "high_fiber",
+        "vitamin_a"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 45,
+      "difficulty": "easy",
+      "season": "fall",
+      "nutritional_metrics": {
+        "protein_ratio": 0.089,
+        "fat_ratio": 0.02,
+        "carb_ratio": 0.92,
+        "protein_density": 0.0222,
+        "fiber_density": 0.0367,
+        "satiety_index": 1.83,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "pasta_whole_wheat",
+      "name": "Whole Wheat Pasta (cooked)",
+      "per_100g": {
+        "calories": 124,
+        "protein": 5.3,
+        "fat": 1.1,
+        "carbs": 25.1,
+        "fiber": 3.2,
+        "sugar": 0.8
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "whole_grain"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 12,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.171,
+        "fat_ratio": 0.08,
+        "carb_ratio": 0.81,
+        "protein_density": 0.0427,
+        "fiber_density": 0.0258,
+        "satiety_index": 3.3,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "spinach_baby",
+      "name": "Baby Spinach (fresh)",
+      "per_100g": {
+        "calories": 23,
+        "protein": 2.9,
+        "fat": 0.4,
+        "carbs": 3.6,
+        "fiber": 2.2,
+        "sugar": 0.4
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "leafy_green",
+        "iron",
+        "vitamin_k"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "snack"
+      ],
+      "preparation_time": 2,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.504,
+        "fat_ratio": 0.157,
+        "carb_ratio": 0.626,
+        "protein_density": 0.1261,
+        "fiber_density": 0.0957,
+        "satiety_index": 3.54,
+        "diet_scores": {
+          "keto": 0.26,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "kale_curly",
+      "name": "Curly Kale (fresh)",
+      "per_100g": {
+        "calories": 35,
+        "protein": 2.9,
+        "fat": 0.4,
+        "carbs": 8.8,
+        "fiber": 3.6,
+        "sugar": 2.3
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "superfood",
+        "vitamin_c",
+        "vitamin_k"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 5,
+      "difficulty": "easy",
+      "season": "winter",
+      "nutritional_metrics": {
+        "protein_ratio": 0.331,
+        "fat_ratio": 0.103,
+        "carb_ratio": 1.006,
+        "protein_density": 0.0829,
+        "fiber_density": 0.1029,
+        "satiety_index": 3.44,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "arugula_wild",
+      "name": "Wild Arugula",
+      "per_100g": {
+        "calories": 25,
+        "protein": 2.6,
+        "fat": 0.7,
+        "carbs": 3.7,
+        "fiber": 1.6,
+        "sugar": 2.1
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "peppery",
+        "vitamin_k"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 2,
+      "difficulty": "none",
+      "season": "spring",
+      "nutritional_metrics": {
+        "protein_ratio": 0.416,
+        "fat_ratio": 0.252,
+        "carb_ratio": 0.592,
+        "protein_density": 0.104,
+        "fiber_density": 0.064,
+        "satiety_index": 3.29,
+        "diet_scores": {
+          "keto": 0.3,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "broccoli_organic",
+      "name": "Organic Broccoli (steamed)",
+      "per_100g": {
+        "calories": 35,
+        "protein": 2.8,
+        "fat": 0.4,
+        "carbs": 7.0,
+        "fiber": 2.6,
+        "sugar": 1.5
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "cruciferous",
+        "vitamin_c"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 8,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.32,
+        "fat_ratio": 0.103,
+        "carb_ratio": 0.8,
+        "protein_density": 0.08,
+        "fiber_density": 0.0743,
+        "satiety_index": 3.28,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "cauliflower_roasted",
+      "name": "Roasted Cauliflower",
+      "per_100g": {
+        "calories": 25,
+        "protein": 1.9,
+        "fat": 0.3,
+        "carbs": 5.0,
+        "fiber": 2.0,
+        "sugar": 1.9
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "cruciferous",
+        "low_carb"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 25,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.304,
+        "fat_ratio": 0.108,
+        "carb_ratio": 0.8,
+        "protein_density": 0.076,
+        "fiber_density": 0.08,
+        "satiety_index": 2.92,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "brussels_sprouts",
+      "name": "Brussels Sprouts (roasted)",
+      "per_100g": {
+        "calories": 43,
+        "protein": 3.4,
+        "fat": 0.3,
+        "carbs": 8.9,
+        "fiber": 3.8,
+        "sugar": 2.2
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "cruciferous",
+        "vitamin_k"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 20,
+      "difficulty": "easy",
+      "season": "fall",
+      "nutritional_metrics": {
+        "protein_ratio": 0.316,
+        "fat_ratio": 0.063,
+        "carb_ratio": 0.828,
+        "protein_density": 0.0791,
+        "fiber_density": 0.0884,
+        "satiety_index": 3.67,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "carrots_rainbow",
+      "name": "Rainbow Carrots (raw)",
+      "per_100g": {
+        "calories": 41,
+        "protein": 0.9,
+        "fat": 0.2,
+        "carbs": 9.6,
+        "fiber": 2.8,
+        "sugar": 4.7
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "vitamin_a",
+        "crunchy"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "snack",
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 3,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.088,
+        "fat_ratio": 0.044,
+        "carb_ratio": 0.937,
+        "protein_density": 0.022,
+        "fiber_density": 0.0683,
+        "satiety_index": 2.28,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "beets_golden",
+      "name": "Golden Beets (roasted)",
+      "per_100g": {
+        "calories": 44,
+        "protein": 1.6,
+        "fat": 0.2,
+        "carbs": 10.0,
+        "fiber": 2.0,
+        "sugar": 6.8
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "nitrates",
+        "antioxidants"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 45,
+      "difficulty": "easy",
+      "season": "fall",
+      "nutritional_metrics": {
+        "protein_ratio": 0.145,
+        "fat_ratio": 0.041,
+        "carb_ratio": 0.909,
+        "protein_density": 0.0364,
+        "fiber_density": 0.0455,
+        "satiety_index": 2.28,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "bell_peppers_rainbow",
+      "name": "Rainbow Bell Peppers",
+      "per_100g": {
+        "calories": 31,
+        "protein": 1.0,
+        "fat": 0.3,
+        "carbs": 7.3,
+        "fiber": 2.5,
+        "sugar": 4.2
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "vitamin_c",
+        "colorful"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner",
+        "snack"
+      ],
+      "preparation_time": 5,
+      "difficulty": "easy",
+      "season": "summer",
+      "nutritional_metrics": {
+        "protein_ratio": 0.129,
+        "fat_ratio": 0.087,
+        "carb_ratio": 0.942,
+        "protein_density": 0.0323,
+        "fiber_density": 0.0806,
+        "satiety_index": 2.48,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "zucchini_spiralized",
+      "name": "Spiralized Zucchini (zoodles)",
+      "per_100g": {
+        "calories": 17,
+        "protein": 1.2,
+        "fat": 0.3,
+        "carbs": 3.1,
+        "fiber": 1.0,
+        "sugar": 2.5
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "low_carb",
+        "pasta_substitute"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 10,
+      "difficulty": "easy",
+      "season": "summer",
+      "nutritional_metrics": {
+        "protein_ratio": 0.282,
+        "fat_ratio": 0.159,
+        "carb_ratio": 0.729,
+        "protein_density": 0.0706,
+        "fiber_density": 0.0588,
+        "satiety_index": 2.53,
+        "diet_scores": {
+          "keto": 0.2,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "berries_mixed_organic",
+      "name": "Organic Mixed Berries",
+      "per_100g": {
+        "calories": 57,
+        "protein": 0.7,
+        "fat": 0.3,
+        "carbs": 14.5,
+        "fiber": 2.4,
+        "sugar": 10.0
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "antioxidants",
+        "low_glycemic"
+      ],
+      "cost_level": "high",
+      "meal_types": [
+        "breakfast",
+        "snack"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "summer",
+      "nutritional_metrics": {
+        "protein_ratio": 0.049,
+        "fat_ratio": 0.047,
+        "carb_ratio": 1.018,
+        "protein_density": 0.0123,
+        "fiber_density": 0.0421,
+        "satiety_index": 1.61,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "avocado_hass",
+      "name": "Hass Avocado",
+      "per_100g": {
+        "calories": 160,
+        "protein": 2.0,
+        "fat": 14.7,
+        "carbs": 8.5,
+        "fiber": 6.7,
+        "sugar": 0.7
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "healthy_fats",
+        "potassium"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "snack"
+      ],
+      "preparation_time": 2,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.05,
+        "fat_ratio": 0.827,
+        "carb_ratio": 0.212,
+        "protein_density": 0.0125,
+        "fiber_density": 0.0419,
+        "satiety_index": 6.9,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "apple_honeycrisp",
+      "name": "Honeycrisp Apple",
+      "per_100g": {
+        "calories": 52,
+        "protein": 0.3,
+        "fat": 0.2,
+        "carbs": 13.8,
+        "fiber": 2.4,
+        "sugar": 10.4
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "fiber",
+        "vitamin_c"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "snack",
+        "breakfast"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "fall",
+      "nutritional_metrics": {
+        "protein_ratio": 0.023,
+        "fat_ratio": 0.035,
+        "carb_ratio": 1.062,
+        "protein_density": 0.0058,
+        "fiber_density": 0.0462,
+        "satiety_index": 1.5,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "banana_organic",
+      "name": "Organic Banana",
+      "per_100g": {
+        "calories": 89,
+        "protein": 1.1,
+        "fat": 0.3,
+        "carbs": 22.8,
+        "fiber": 2.6,
+        "sugar": 12.2
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "potassium",
+        "energy"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "breakfast",
+        "snack"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.049,
+        "fat_ratio": 0.03,
+        "carb_ratio": 1.025,
+        "protein_density": 0.0124,
+        "fiber_density": 0.0292,
+        "satiety_index": 1.28,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "olive_oil_extra_virgin",
+      "name": "Extra Virgin Olive Oil",
+      "per_100g": {
+        "calories": 884,
+        "protein": 0.0,
+        "fat": 100.0,
+        "carbs": 0.0,
+        "fiber": 0.0,
+        "sugar": 0.0
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "monounsaturated",
+        "mediterranean"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "cooking",
+        "dressing"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.0,
+        "fat_ratio": 1.018,
+        "carb_ratio": 0.0,
+        "protein_density": 0.0,
+        "fiber_density": 0.0,
+        "satiety_index": 22.0,
+        "diet_scores": {
+          "keto": 0.71,
+          "paleo": 0.5,
+          "mediterranean": 1.0
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "almonds_raw",
+      "name": "Raw Almonds",
+      "per_100g": {
+        "calories": 579,
+        "protein": 21.2,
+        "fat": 49.9,
+        "carbs": 21.6,
+        "fiber": 12.5,
+        "sugar": 4.4
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "vitamin_e",
+        "magnesium"
+      ],
+      "cost_level": "high",
+      "meal_types": [
+        "snack"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.146,
+        "fat_ratio": 0.776,
+        "carb_ratio": 0.149,
+        "protein_density": 0.0366,
+        "fiber_density": 0.0216,
+        "satiety_index": 22.21,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [
+        "nuts"
+      ],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "walnuts_halves",
+      "name": "Walnut Halves",
+      "per_100g": {
+        "calories": 654,
+        "protein": 15.2,
+        "fat": 65.2,
+        "carbs": 13.7,
+        "fiber": 6.7,
+        "sugar": 2.6
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "omega3",
+        "brain_food"
+      ],
+      "cost_level": "high",
+      "meal_types": [
+        "snack"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.093,
+        "fat_ratio": 0.897,
+        "carb_ratio": 0.084,
+        "protein_density": 0.0232,
+        "fiber_density": 0.0102,
+        "satiety_index": 21.76,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [
+        "nuts"
+      ],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "chia_seeds_organic",
+      "name": "Organic Chia Seeds",
+      "per_100g": {
+        "calories": 486,
+        "protein": 16.5,
+        "fat": 30.7,
+        "carbs": 42.1,
+        "fiber": 34.4,
+        "sugar": 0.0
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "omega3",
+        "superfood"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "breakfast",
+        "snack"
+      ],
+      "preparation_time": 0,
+      "difficulty": "none",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.136,
+        "fat_ratio": 0.569,
+        "carb_ratio": 0.347,
+        "protein_density": 0.034,
+        "fiber_density": 0.0708,
+        "satiety_index": 23.06,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "mediterranean_salad",
+      "name": "Mediterranean Chickpea Salad",
+      "per_100g": {
+        "calories": 152,
+        "protein": 6.2,
+        "fat": 8.1,
+        "carbs": 16.8,
+        "fiber": 4.2,
+        "sugar": 3.1
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "mediterranean",
+        "complete_meal"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch"
+      ],
+      "preparation_time": 15,
+      "difficulty": "easy",
+      "season": "summer",
+      "nutritional_metrics": {
+        "protein_ratio": 0.163,
+        "fat_ratio": 0.48,
+        "carb_ratio": 0.442,
+        "protein_density": 0.0408,
+        "fiber_density": 0.0276,
+        "satiety_index": 5.68,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 1.0
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "quinoa_power_bowl",
+      "name": "Quinoa Power Bowl",
+      "per_100g": {
+        "calories": 180,
+        "protein": 8.5,
+        "fat": 6.2,
+        "carbs": 24.3,
+        "fiber": 5.1,
+        "sugar": 4.2
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "complete_meal",
+        "balanced"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 25,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.189,
+        "fat_ratio": 0.31,
+        "carb_ratio": 0.54,
+        "protein_density": 0.0472,
+        "fiber_density": 0.0283,
+        "satiety_index": 6.17,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "grilled_salmon_vegetables",
+      "name": "Grilled Salmon with Roasted Vegetables",
+      "per_100g": {
+        "calories": 145,
+        "protein": 18.2,
+        "fat": 6.8,
+        "carbs": 5.2,
+        "fiber": 2.1,
+        "sugar": 2.8
+      },
+      "tags": [
+        "non_veg",
+        "omega3",
+        "complete_meal"
+      ],
+      "cost_level": "high",
+      "meal_types": [
+        "dinner"
+      ],
+      "preparation_time": 35,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.502,
+        "fat_ratio": 0.422,
+        "carb_ratio": 0.143,
+        "protein_density": 0.1255,
+        "fiber_density": 0.0145,
+        "satiety_index": 10.75,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.3
+    },
+    {
+      "id": "lentil_vegetable_soup",
+      "name": "Hearty Lentil Vegetable Soup",
+      "per_100g": {
+        "calories": 95,
+        "protein": 6.8,
+        "fat": 0.8,
+        "carbs": 16.2,
+        "fiber": 6.2,
+        "sugar": 3.1
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "comfort_food",
+        "high_fiber"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 45,
+      "difficulty": "easy",
+      "season": "winter",
+      "nutritional_metrics": {
+        "protein_ratio": 0.286,
+        "fat_ratio": 0.076,
+        "carb_ratio": 0.682,
+        "protein_density": 0.0716,
+        "fiber_density": 0.0653,
+        "satiety_index": 5.12,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "tofu_stir_fry",
+      "name": "Asian Tofu Vegetable Stir Fry",
+      "per_100g": {
+        "calories": 112,
+        "protein": 8.9,
+        "fat": 6.2,
+        "carbs": 8.1,
+        "fiber": 2.8,
+        "sugar": 4.2
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "asian",
+        "complete_meal"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "preparation_time": 20,
+      "difficulty": "medium",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.318,
+        "fat_ratio": 0.498,
+        "carb_ratio": 0.289,
+        "protein_density": 0.0795,
+        "fiber_density": 0.025,
+        "satiety_index": 6.83,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "green_smoothie",
+      "name": "Green Smoothie (spinach, banana, berries)",
+      "per_100g": {
+        "calories": 65,
+        "protein": 2.1,
+        "fat": 0.5,
+        "carbs": 14.8,
+        "fiber": 2.8,
+        "sugar": 9.2
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "smoothie",
+        "vitamin_rich"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "breakfast",
+        "snack"
+      ],
+      "preparation_time": 5,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.129,
+        "fat_ratio": 0.069,
+        "carb_ratio": 0.911,
+        "protein_density": 0.0323,
+        "fiber_density": 0.0431,
+        "satiety_index": 2.3,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "hummus_classic",
+      "name": "Classic Hummus",
+      "per_100g": {
+        "calories": 166,
+        "protein": 8.0,
+        "fat": 9.6,
+        "carbs": 14.3,
+        "fiber": 6.0,
+        "sugar": 0.3
+      },
+      "tags": [
+        "veg",
+        "vegan",
+        "mediterranean",
+        "dip"
+      ],
+      "cost_level": "low",
+      "meal_types": [
+        "snack"
+      ],
+      "preparation_time": 10,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.193,
+        "fat_ratio": 0.52,
+        "carb_ratio": 0.345,
+        "protein_density": 0.0482,
+        "fiber_density": 0.0361,
+        "satiety_index": 7.49,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 1.0
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.9
+    },
+    {
+      "id": "protein_smoothie",
+      "name": "Post-Workout Protein Smoothie",
+      "per_100g": {
+        "calories": 95,
+        "protein": 12.5,
+        "fat": 1.2,
+        "carbs": 8.8,
+        "fiber": 1.5,
+        "sugar": 6.2
+      },
+      "tags": [
+        "veg",
+        "high_protein",
+        "post_workout"
+      ],
+      "cost_level": "medium",
+      "meal_types": [
+        "snack"
+      ],
+      "preparation_time": 5,
+      "difficulty": "easy",
+      "season": "all",
+      "nutritional_metrics": {
+        "protein_ratio": 0.526,
+        "fat_ratio": 0.114,
+        "carb_ratio": 0.371,
+        "protein_density": 0.1316,
+        "fiber_density": 0.0158,
+        "satiety_index": 6.81,
+        "diet_scores": {
+          "keto": 0,
+          "paleo": 0.5,
+          "mediterranean": 0.3
+        }
+      },
+      "allergens": [],
+      "environmental_score": 0.7
+    }
+  ],
+  "metadata": {
+    "version": "2.0",
+    "generated_date": "2025-08-31T20:34:28.294992",
+    "total_foods": 44,
+    "description": "Enhanced food dataset with improved nutritional accuracy and ML features",
+    "categories": [
+      "proteins",
+      "carbohydrates",
+      "vegetables",
+      "fruits",
+      "healthy_fats",
+      "meal_combinations",
+      "snacks_beverages"
+    ],
+    "features": [
+      "basic_nutrition",
+      "dietary_tags",
+      "cost_level",
+      "meal_types",
+      "preparation_info",
+      "seasonal_availability",
+      "nutritional_metrics",
+      "allergen_info",
+      "environmental_score"
+    ]
+  }
+}
