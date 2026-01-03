@@ -1,140 +1,325 @@
-import axios from 'axios';
+/**
+ * Diet Coach API Service
+ * Handles all API communication with the backend
+ */
+
 import type {
   TDEERequest,
   TDEEResponse,
   MealPlanRequest,
   MealPlanResponse,
-  ExplainRequest,
-  ExplainResponse,
+  LoginRequest,
+  RegisterRequest,
+  AuthResponse,
+  AuthUser,
+  AuthTokens,
+  ChatRequest,
+  ChatResponse,
+  GroceryListRequest,
+  GroceryListResponse,
 } from '@/types/api';
 
-// Create axios instance with base configuration
-const api = axios.create({
-  baseURL: 'http://localhost:8000',
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// Request interceptor for debugging
-api.interceptors.request.use((config) => {
-  console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`);
-  return config;
-});
+// Token storage keys
+const ACCESS_TOKEN_KEY = 'diet_access_token';
+const REFRESH_TOKEN_KEY = 'diet_refresh_token';
 
-// Response interceptor for error handling
-api.interceptors.response.use(
-  (response) => {
-    console.log(`✅ API Response: ${response.status} ${response.config.url}`);
-    return response;
-  },
-  (error) => {
-    console.error(`❌ API Error: ${error.response?.status} ${error.config?.url}`, error.response?.data);
-    
-    // Transform API errors to user-friendly messages
-    if (error.response?.status === 422) {
-      const detail = error.response.data?.detail;
-      if (Array.isArray(detail)) {
-        const messages = detail.map((err: any) => `${err.loc?.join('.')}: ${err.msg}`);
-        throw new Error(`Validation Error: ${messages.join(', ')}`);
-      }
-      throw new Error(`Validation Error: ${detail || 'Invalid input data'}`);
-    }
-    
-    if (error.response?.status === 500) {
-      throw new Error('Server error occurred. Please try again later.');
-    }
-    
-    if (error.code === 'ECONNABORTED') {
-      throw new Error('Request timeout. Please check your connection.');
-    }
-    
-    if (!error.response) {
-      throw new Error('Network error. Please check your connection.');
-    }
-    
-    throw new Error(error.response?.data?.detail || error.message || 'An error occurred');
+class ApiService {
+  private baseUrl: string;
+
+  constructor(baseUrl: string = API_BASE_URL) {
+    this.baseUrl = baseUrl;
   }
-);
 
-// API Methods
-export const dietAPI = {
+  // Token management
+  getAccessToken(): string | null {
+    return localStorage.getItem(ACCESS_TOKEN_KEY);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
+  }
+
+  setTokens(tokens: AuthTokens): void {
+    localStorage.setItem(ACCESS_TOKEN_KEY, tokens.access_token);
+    localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refresh_token);
+  }
+
+  clearTokens(): void {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const token = this.getAccessToken();
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    };
+
+    if (token) {
+      (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
+
+    if (response.status === 401) {
+      // Try to refresh token
+      const refreshed = await this.refreshTokens();
+      if (refreshed) {
+        // Retry the request with new token
+        const newToken = this.getAccessToken();
+        (headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
+        const retryResponse = await fetch(url, { ...options, headers });
+        if (!retryResponse.ok) {
+          throw new Error(await retryResponse.text());
+        }
+        return retryResponse.json();
+      }
+      this.clearTokens();
+      throw new Error('Session expired. Please login again.');
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Request failed: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
   // Health check
-  async health(): Promise<{ status: string; service: string }> {
-    const response = await api.get('/health');
-    return response.data;
-  },
+  async health(): Promise<any> {
+    return this.request('/health');
+  }
 
-  // Calculate TDEE and macro targets
+  // ============================================================================
+  // AUTHENTICATION
+  // ============================================================================
+
+  async register(data: RegisterRequest): Promise<AuthResponse> {
+    const response = await this.request<AuthResponse>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    this.setTokens(response.tokens);
+    return response;
+  }
+
+  async login(data: LoginRequest): Promise<AuthResponse> {
+    const response = await this.request<AuthResponse>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    this.setTokens(response.tokens);
+    return response;
+  }
+
+  async logout(): Promise<void> {
+    this.clearTokens();
+  }
+
+  async refreshTokens(): Promise<boolean> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) return false;
+
+    try {
+      const response = await fetch(`${this.baseUrl}/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+
+      if (!response.ok) return false;
+
+      const data = await response.json();
+      this.setTokens(data.tokens);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async getCurrentUser(): Promise<AuthUser> {
+    return this.request<AuthUser>('/auth/me');
+  }
+
+  async updateProfile(profile: Record<string, any>): Promise<{ user: AuthUser; message: string }> {
+    return this.request('/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify({ profile }),
+    });
+  }
+
+  async updatePreferences(preferences: Record<string, any>): Promise<{ user: AuthUser; message: string }> {
+    return this.request('/auth/preferences', {
+      method: 'PUT',
+      body: JSON.stringify({ preferences }),
+    });
+  }
+
+  async changePassword(oldPassword: string, newPassword: string): Promise<{ message: string }> {
+    return this.request('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+    });
+  }
+
+  // ============================================================================
+  // NUTRITION ENDPOINTS
+  // ============================================================================
+
   async calculateTDEE(data: TDEERequest): Promise<TDEEResponse> {
-    const response = await api.post('/tdee', data);
-    return response.data;
-  },
+    return this.request<TDEEResponse>('/tdee', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
 
-  // Generate meal plan
   async generateMealPlan(data: MealPlanRequest): Promise<MealPlanResponse> {
-    const response = await api.post('/mealplan', data);
-    return response.data;
-  },
+    return this.request<MealPlanResponse>('/mealplan', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
 
-  // Get nutrition explanation
-  async explainNutrition(data: ExplainRequest): Promise<ExplainResponse> {
-    const params = new URLSearchParams();
-    params.append('calories', data.calories.toString());
-    if (data.protein_g) params.append('protein_g', data.protein_g.toString());
-    if (data.fat_g) params.append('fat_g', data.fat_g.toString());
-    if (data.carbs_g) params.append('carbs_g', data.carbs_g.toString());
-    if (data.constraints) params.append('constraints', data.constraints);
+  async explainNutrition(params: {
+    calories: number;
+    protein_g?: number;
+    fat_g?: number;
+    carbs_g?: number;
+    constraints?: string;
+    diet_tags?: string[];
+  }): Promise<{ explanation: string }> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('calories', params.calories.toString());
+    if (params.protein_g) queryParams.append('protein_g', params.protein_g.toString());
+    if (params.fat_g) queryParams.append('fat_g', params.fat_g.toString());
+    if (params.carbs_g) queryParams.append('carbs_g', params.carbs_g.toString());
+    if (params.constraints) queryParams.append('constraints', params.constraints);
+    if (params.diet_tags) {
+      params.diet_tags.forEach(tag => queryParams.append('diet_tags', tag));
+    }
 
-    const response = await api.get(`/explain?${params.toString()}`);
-    return response.data;
-  },
+    return this.request(`/explain?${queryParams.toString()}`);
+  }
 
-  // Get available diet options
-  async getDietOptions(): Promise<{ diet_options: Array<{
-    value: string;
-    label: string;
-    description: string;
-    icon: string;
-    examples: string[];
-  }> }> {
-    const response = await api.get('/diet-options');
-    return response.data;
-  },
+  async getDietOptions(): Promise<{ diet_options: any[] }> {
+    return this.request('/diet-options');
+  }
+
+  // ============================================================================
+  // AI CHAT
+  // ============================================================================
+
+  async chat(data: ChatRequest): Promise<ChatResponse> {
+    return this.request<ChatResponse>('/ai/chat', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getChatHistory(): Promise<{ history: any[] }> {
+    return this.request<{ history: any[] }>('/ai/chat/history');
+  }
+
+  async clearChatHistory(): Promise<{ success: boolean; message: string }> {
+    return this.request('/ai/chat/clear', {
+      method: 'POST',
+    });
+  }
+
+  async getAIStatus(): Promise<{
+    providers: Array<{ name: string; status: string; model: string }>;
+    default_provider: string;
+    fallback_available: boolean;
+  }> {
+    return this.request('/ai/status');
+  }
+
+  // ============================================================================
+  // GROCERY LIST
+  // ============================================================================
+
+  async generateGroceryList(data: GroceryListRequest): Promise<GroceryListResponse> {
+    return this.request<GroceryListResponse>('/ai/grocery-list', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async generateRecipe(data: { meal: any; context?: any; provider?: string }): Promise<any> {
+    return this.request('/ai/recipe', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // ============================================================================
+  // EXPORT
+  // ============================================================================
+
+  async exportToExcel(data: {
+    user_profile: any;
+    nutrition_targets: any;
+    meal_plan: any;
+    explanation?: string;
+  }): Promise<{
+    success: boolean;
+    filename: string;
+    excel_data: string;
+  }> {
+    return this.request('/export/excel', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+}
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+
+/**
+ * Transform user profile data into TDEE request format
+ */
+export const transformUserProfileToTDEE = (profile: any): TDEERequest => {
+  return {
+    sex: profile.sex,
+    age: Number(profile.age),
+    height_cm: Number(profile.height_cm),
+    weight_kg: Number(profile.weight_kg),
+    activity_level: profile.activity_level,
+    goal: profile.goal,
+  };
 };
 
-// Helper functions for data transformation
-export const transformUserProfileToTDEE = (profile: any): TDEERequest => ({
-  sex: profile.sex,
-  age: profile.age,
-  height_cm: profile.height_cm,
-  weight_kg: profile.weight_kg,
-  activity_level: profile.activity_level,
-  goal: profile.goal,
-});
-
+/**
+ * Transform TDEE response into Meal Plan request format
+ */
 export const transformTDEEToMealPlan = (
   tdee: TDEEResponse,
-  preferences: { days: number; diet_tags: string[] }
-): MealPlanRequest => ({
-  calories: tdee.target_calories,
-  protein_g: tdee.macro_targets.protein_g,
-  fat_g: tdee.macro_targets.fat_g,
-  carbs_g: tdee.macro_targets.carbs_g,
-  days: preferences.days,
-  diet_tags: preferences.diet_tags,
-});
-
-// Utility functions
-export const formatMacroPercentage = (macroGrams: number, totalCalories: number, caloriesPerGram: number): number => {
-  return Math.round((macroGrams * caloriesPerGram / totalCalories) * 100);
+  options: { days: number; diet_tags: string[] }
+): MealPlanRequest => {
+  return {
+    calories: tdee.target_calories,
+    protein_g: tdee.macro_targets.protein_g,
+    fat_g: tdee.macro_targets.fat_g,
+    carbs_g: tdee.macro_targets.carbs_g,
+    diet_tags: options.diet_tags,
+    days: options.days,
+  };
 };
 
-export const calculateMacroPercentages = (protein: number, fat: number, carbs: number, calories: number) => ({
-  protein: formatMacroPercentage(protein, calories, 4),
-  fat: formatMacroPercentage(fat, calories, 9),
-  carbs: formatMacroPercentage(carbs, calories, 4),
-});
-
-export default api;
+// Export singleton instance
+export const dietAPI = new ApiService();
+export default dietAPI;

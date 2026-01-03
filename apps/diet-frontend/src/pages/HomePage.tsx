@@ -1,15 +1,14 @@
 import { } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  ArrowRight, 
-  Calculator, 
-  UtensilsCrossed, 
-  Target, 
+import {
+  ArrowRight,
+  Calculator,
+  UtensilsCrossed,
+  Target,
   Sparkles,
   CheckCircle,
   Users,
-  Clock,
   TrendingUp
 } from 'lucide-react';
 import type { AppState } from '@/types/api';
@@ -22,27 +21,27 @@ export default function HomePage({ context }: HomePageProps) {
   const features = [
     {
       icon: Calculator,
-      title: 'Smart TDEE Calculation',
-      description: 'Accurate Total Daily Energy Expenditure calculation based on your body composition and activity level.',
-      color: 'from-blue-500 to-cyan-500'
+      title: 'Precision Metadata Analysis',
+      description: 'Accurate TDEE calculations utilizing advanced bio-metric algorithms and system metadata.',
+      color: 'from-blue-600 to-cyan-600'
     },
     {
       icon: UtensilsCrossed,
-      title: 'Personalized Meal Plans',
-      description: 'AI-generated meal plans tailored to your dietary preferences, restrictions, and macro targets.',
-      color: 'from-green-500 to-emerald-500'
+      title: 'Algorithmic Meal Planning',
+      description: 'System-generated nutrition protocols tailored to hyper-specific dietary constraints and goals.',
+      color: 'from-emerald-600 to-teal-600'
     },
     {
       icon: Target,
-      title: 'Macro Optimization',
-      description: 'Precise protein, fat, and carbohydrate targets optimized for your specific fitness goals.',
-      color: 'from-purple-500 to-pink-500'
+      title: 'Macro-Nutrient Optimization',
+      description: 'Data-driven targets for protein, lipid, and carbohydrate intake for peak metabolic performance.',
+      color: 'from-purple-600 to-pink-600'
     },
     {
       icon: Sparkles,
-      title: 'AI-Powered Insights',
-      description: 'Intelligent explanations and recommendations powered by advanced nutrition science.',
-      color: 'from-orange-500 to-red-500'
+      title: 'AI Coaching Interface',
+      description: '24/7 intelligent coaching integrated with OpenAI, Gemini, and Local LLM systems for real-time advice.',
+      color: 'from-orange-600 to-amber-600'
     }
   ];
 
@@ -57,8 +56,8 @@ export default function HomePage({ context }: HomePageProps) {
 
   const stats = [
     { label: 'Accurate TDEE', value: '±5%', icon: Target },
-    { label: 'Meal Combinations', value: '1000+', icon: UtensilsCrossed },
-    { label: 'Setup Time', value: '2 min', icon: Clock },
+    { label: 'AI Responses', value: '< 2s', icon: Sparkles },
+    { label: 'Meals Analysis', value: 'Instant', icon: UtensilsCrossed },
   ];
 
   return (
@@ -86,7 +85,7 @@ export default function HomePage({ context }: HomePageProps) {
             </span>
           </h1>
           <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Get personalized nutrition plans, accurate TDEE calculations, and AI-driven meal recommendations 
+            Get personalized nutrition plans, accurate TDEE calculations, and AI-driven meal recommendations
             tailored to your unique goals and preferences.
           </p>
         </motion.div>
@@ -104,7 +103,7 @@ export default function HomePage({ context }: HomePageProps) {
             {context.user ? 'View Your Plan' : 'Get Started'}
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
-          
+
           {context.user && (
             <Link
               to="/profile"
@@ -207,10 +206,10 @@ export default function HomePage({ context }: HomePageProps) {
                 Why Choose Diet Coach?
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-                Join thousands of users who have transformed their nutrition journey with our 
+                Join thousands of users who have transformed their nutrition journey with our
                 evidence-based approach and personalized recommendations.
               </p>
-              
+
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
                   <motion.div
@@ -251,16 +250,16 @@ export default function HomePage({ context }: HomePageProps) {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                   94%
                 </div>
-                
+
                 <p className="text-gray-600 dark:text-gray-300">
                   of our users successfully achieve their nutrition targets within 30 days
                 </p>
               </div>
-              
+
               {/* Decorative elements */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-secondary-400 to-primary-400 rounded-full opacity-20 blur-xl"></div>
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full opacity-20 blur-xl"></div>
@@ -284,7 +283,7 @@ export default function HomePage({ context }: HomePageProps) {
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
             Start your personalized nutrition journey today. It takes just 2 minutes to set up.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/profile"

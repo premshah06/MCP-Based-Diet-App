@@ -1,0 +1,430 @@
+/* Accessibility and Cultural Sensitivity Styles */
+
+/* Font Size Classes */
+.font-size-small {
+  font-size: 14px;
+}
+
+.font-size-medium {
+  font-size: 16px;
+}
+
+.font-size-large {
+  font-size: 18px;
+}
+
+.font-size-extra-large {
+  font-size: 22px;
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --primary-50: #ffffff;
+  --primary-100: #f0f0f0;
+  --primary-500: #000000;
+  --primary-600: #000000;
+  --primary-700: #000000;
+  --primary-900: #000000;
+  
+  --gray-50: #ffffff;
+  --gray-100: #f0f0f0;
+  --gray-200: #e0e0e0;
+  --gray-300: #c0c0c0;
+  --gray-400: #808080;
+  --gray-500: #606060;
+  --gray-600: #404040;
+  --gray-700: #202020;
+  --gray-800: #101010;
+  --gray-900: #000000;
+  
+  /* High contrast text */
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.high-contrast .dark {
+  color: #ffffff;
+  background-color: #000000;
+}
+
+.high-contrast button,
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  border: 2px solid #000000 !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.high-contrast .dark button,
+.high-contrast .dark input,
+.high-contrast .dark select,
+.high-contrast .dark textarea {
+  border: 2px solid #ffffff !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast a {
+  color: #0000ff !important;
+  text-decoration: underline;
+}
+
+.high-contrast .dark a {
+  color: #00ffff !important;
+  text-decoration: underline;
+}
+
+.high-contrast button:focus,
+.high-contrast input:focus,
+.high-contrast select:focus,
+.high-contrast textarea:focus,
+.high-contrast a:focus {
+  outline: 3px solid #ff0000 !important;
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+.reduced-motion,
+.reduced-motion *,
+.reduced-motion *:before,
+.reduced-motion *:after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Screen Reader Optimizations */
+.screen-reader-optimized .sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.25rem !important;
+  margin: 0.25rem !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  background-color: yellow !important;
+  color: black !important;
+  border: 2px solid black !important;
+}
+
+.screen-reader-optimized button,
+.screen-reader-optimized input,
+.screen-reader-optimized select,
+.screen-reader-optimized textarea {
+  position: relative;
+}
+
+.screen-reader-optimized button:focus::after,
+.screen-reader-optimized input:focus::after,
+.screen-reader-optimized select:focus::after,
+.screen-reader-optimized textarea:focus::after {
+  content: " (focused)";
+  position: absolute;
+  top: -2rem;
+  left: 0;
+  background: yellow;
+  color: black;
+  padding: 0.25rem;
+  border: 1px solid black;
+  font-size: 0.875rem;
+  z-index: 1000;
+}
+
+/* Focus indicators for keyboard navigation */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+/* Skip navigation link */
+.skip-nav {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-nav:focus {
+  top: 6px;
+}
+
+/* Improved button accessibility */
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button[aria-pressed="true"] {
+  background-color: var(--primary-600);
+  color: white;
+}
+
+/* Loading states with accessibility */
+.loading {
+  position: relative;
+}
+
+.loading::after {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Cultural layout adjustments */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+/* Language-specific font adjustments */
+[lang="ar"], [lang="fa"], [lang="ur"] {
+  font-family: 'Noto Sans Arabic', 'Amiri', 'Scheherazade', serif;
+  line-height: 1.8;
+}
+
+[lang="zh"], [lang="ja"], [lang="ko"] {
+  font-family: 'Noto Sans CJK', 'Hiragino Sans', 'Microsoft YaHei', sans-serif;
+  line-height: 1.7;
+}
+
+[lang="hi"], [lang="bn"], [lang="ta"] {
+  font-family: 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Tamil', sans-serif;
+  line-height: 1.8;
+}
+
+/* Print accessibility */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  button, input, select, textarea {
+    border: 1px solid #000 !important;
+    background: transparent !important;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}
+
+/* Color blindness support */
+.color-blind-friendly .bg-red-500 {
+  background-color: #d97706; /* Orange instead of red */
+}
+
+.color-blind-friendly .text-red-500 {
+  color: #d97706; /* Orange instead of red */
+}
+
+.color-blind-friendly .bg-green-500 {
+  background-color: #059669; /* Teal instead of green */
+}
+
+.color-blind-friendly .text-green-500 {
+  color: #059669; /* Teal instead of green */
+}
+
+/* Touch target size for mobile accessibility */
+@media (max-width: 768px) {
+  button, input, select, textarea, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .touch-target {
+    padding: 12px;
+  }
+}
+
+/* Motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Contrast preferences */
+@media (prefers-contrast: more) {
+  button, input, select, textarea {
+    border-width: 2px;
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+  .shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Error states with accessibility */
+.error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2;
+}
+
+.error:focus {
+  outline-color: #ef4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+}
+
+.error-message {
+  color: #dc2626;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.error-message::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+/* Success states */
+.success {
+  border-color: #10b981 !important;
+  background-color: #f0fdf4;
+}
+
+.success-message {
+  color: #059669;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.success-message::before {
+  content: "✓ ";
+  font-weight: bold;
+}
+
+/* Status indicators */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-indicator::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-indicator.online::before {
+  background-color: #10b981;
+}
+
+.status-indicator.offline::before {
+  background-color: #ef4444;
+}
+
+.status-indicator.pending::before {
+  background-color: #f59e0b;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Accessible form layout */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--gray-700);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-help {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
+}
+
+.form-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+  margin-top: 0.25rem;
+}
+
+/* Responsive text sizes */
+@media (max-width: 640px) {
+  .font-size-small { font-size: 12px; }
+  .font-size-medium { font-size: 14px; }
+  .font-size-large { font-size: 16px; }
+  .font-size-extra-large { font-size: 20px; }
+}
+
+@media (min-width: 1024px) {
+  .font-size-small { font-size: 16px; }
+  .font-size-medium { font-size: 18px; }
+  .font-size-large { font-size: 20px; }
+  .font-size-extra-large { font-size: 24px; }
+}

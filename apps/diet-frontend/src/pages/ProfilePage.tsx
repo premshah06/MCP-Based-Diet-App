@@ -3,15 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { 
-  User, 
-  Activity, 
-  Target, 
-  Save, 
-  ArrowRight, 
+import {
+  User,
+  Activity,
+  Target,
+  Save,
+  ArrowRight,
   AlertCircle,
   Info
 } from 'lucide-react';
+import { LucideIcon } from '@/components/LucideIcon';
 
 import { dietAPI, transformUserProfileToTDEE } from '@/services/api';
 import { ACTIVITY_LEVELS, GOALS, VALIDATION, DIET_TAGS } from '@/utils/constants';
@@ -29,7 +30,7 @@ interface ProfilePageProps {
 
 export default function ProfilePage({ context }: ProfilePageProps) {
   const navigate = useNavigate();
-  
+
   const {
     register,
     handleSubmit,
@@ -48,7 +49,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
     },
     resolver: (values) => {
       const errors: any = {};
-      
+
       // Validate diet preferences
       if (!values.diet_preferences || values.diet_preferences.length === 0) {
         errors.diet_preferences = {
@@ -56,7 +57,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
           message: 'Please select at least one diet preference'
         };
       }
-      
+
       return {
         values,
         errors: Object.keys(errors).length > 0 ? errors : {}
@@ -78,7 +79,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
         ...data,
         diet_preferences: data.diet_preferences || [],
       };
-      
+
       context.updateUserProfile(userProfile);
 
       // Calculate TDEE automatically
@@ -90,7 +91,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
 
       toast.success('Profile saved and nutrition calculated!');
       navigate('/results');
-      
+
     } catch (error) {
       console.error('Profile submission error:', error);
       context.setError(error instanceof Error ? error.message : 'Failed to save profile');
@@ -155,8 +156,8 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'male', label: 'Male', emoji: '👨' },
-                    { value: 'female', label: 'Female', emoji: '👩' },
+                    { value: 'male', label: 'Male', icon: User },
+                    { value: 'female', label: 'Female', icon: User },
                   ].map((option) => (
                     <label
                       key={option.value}
@@ -173,7 +174,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                         {...register('sex', { required: 'Please select your sex' })}
                         className="sr-only"
                       />
-                      <span className="text-2xl">{option.emoji}</span>
+                      <option.icon className={cn('w-5 h-5', watchedValues.sex === option.value ? 'text-primary-500' : 'text-gray-400')} />
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         {option.label}
                       </span>
@@ -319,7 +320,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                     {...register('activity_level', { required: 'Please select your activity level' })}
                     className="sr-only"
                   />
-                  <span className="text-2xl">{level.icon}</span>
+                  <LucideIcon name={level.icon} className={cn("w-6 h-6", watchedValues.activity_level === level.value ? "text-blue-500" : "text-gray-400")} />
                   <div className="flex-1">
                     <div className="font-medium text-gray-900 dark:text-gray-100">
                       {level.label}
@@ -375,7 +376,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                     {...register('goal', { required: 'Please select your goal' })}
                     className="sr-only"
                   />
-                  <span className="text-3xl mb-3">{goal.icon}</span>
+                  <LucideIcon name={goal.icon} className={cn("w-8 h-8 mb-3", watchedValues.goal === goal.value ? "text-purple-500" : "text-gray-400")} />
                   <div className="font-medium text-gray-900 dark:text-gray-100 mb-2">
                     {goal.label}
                   </div>
@@ -404,11 +405,11 @@ export default function ProfilePage({ context }: ProfilePageProps) {
             className="card"
           >
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">🥗</span>
+              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center">
+                <LucideIcon name="Leaf" className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                Diet Preferences
+                Dietary Architecture
               </h2>
             </div>
 
@@ -416,8 +417,8 @@ export default function ProfilePage({ context }: ProfilePageProps) {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Select your dietary preferences to get personalized meal recommendations.
               </p>
-              
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {DIET_TAGS.map((tag) => (
                   <label
                     key={tag.value}
@@ -434,7 +435,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                       {...register('diet_preferences')}
                       className="sr-only"
                     />
-                    <span className="text-2xl">{tag.icon}</span>
+                    <LucideIcon name={tag.icon} className={cn("w-6 h-6", watchedValues.diet_preferences?.includes(tag.value) ? "text-emerald-500" : "text-gray-400")} />
                     <div className="flex-1">
                       <div className="font-medium text-gray-900 dark:text-gray-100">
                         {tag.label}
@@ -446,7 +447,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                   </label>
                 ))}
               </div>
-              
+
               {/* Selected Preferences Display */}
               {watchedValues.diet_preferences && watchedValues.diet_preferences.length > 0 && (
                 <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
@@ -460,9 +461,9 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                       return tag ? (
                         <span
                           key={pref}
-                          className="inline-flex items-center space-x-1 px-3 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full text-sm font-medium"
+                          className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-200 rounded-xl text-sm font-bold border border-emerald-200 dark:border-emerald-800"
                         >
-                          <span>{tag.icon}</span>
+                          <LucideIcon name={tag.icon} className="w-4 h-4" />
                           <span>{tag.label}</span>
                         </span>
                       ) : null;
@@ -470,7 +471,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                   </div>
                 </div>
               )}
-              
+
               {/* Error Display */}
               {errors.diet_preferences && (
                 <p className="error-message flex items-center space-x-1">
@@ -478,7 +479,7 @@ export default function ProfilePage({ context }: ProfilePageProps) {
                   <span>{errors.diet_preferences.message}</span>
                 </p>
               )}
-              
+
               <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
                 <div className="flex items-start space-x-3">
                   <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />

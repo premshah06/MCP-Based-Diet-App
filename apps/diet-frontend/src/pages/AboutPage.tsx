@@ -1,13 +1,13 @@
 import { } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Brain, 
-  Calculator, 
-  Shield, 
-  Zap, 
-  Target, 
-  Users, 
-  Award, 
+import {
+  Brain,
+  Calculator,
+  Shield,
+  Zap,
+  Target,
+  Users,
+  Award,
   Lightbulb,
   Heart,
   Sparkles,
@@ -105,7 +105,7 @@ export default function AboutPage({ context }: AboutPageProps) {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
           >
-            Discover how we combine cutting-edge AI with evidence-based nutrition science 
+            Discover how we combine cutting-edge AI with evidence-based nutrition science
             to deliver personalized meal plans and accurate TDEE calculations.
           </motion.p>
         </div>
@@ -191,7 +191,7 @@ export default function AboutPage({ context }: AboutPageProps) {
                             Accuracy: {method.accuracy}
                           </span>
                           <div className="w-16 h-2 bg-green-200 dark:bg-green-800 rounded-full">
-                            <div 
+                            <div
                               className="h-full bg-green-500 rounded-full"
                               style={{ width: `${100 - parseInt(method.accuracy.replace(/[^0-9]/g, ''))}%` }}
                             ></div>
@@ -279,40 +279,10 @@ export default function AboutPage({ context }: AboutPageProps) {
                 <ul className="space-y-2 text-gray-600 dark:text-gray-300">
                   <li>• FastAPI for high-performance APIs</li>
                   <li>• Python with Pydantic for data validation</li>
-                  <li>• OLLAMA integration for AI explanations</li>
+                  <li>• Multi-Model AI Orchestration (OpenAI, Gemini, HF)</li>
                   <li>• Docker containerization</li>
                   <li>• MCP (Model Context Protocol) support</li>
                 </ul>
-              </div>
-            </div>
-
-            <div className="mt-8 card bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Data Sources & Research
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
-                    Scientific References
-                  </h4>
-                  <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                    <li>• International Society of Sports Nutrition (ISSN)</li>
-                    <li>• American College of Sports Medicine (ACSM)</li>
-                    <li>• Mifflin-St Jeor BMR equation (1990)</li>
-                    <li>• Harris-Benedict activity factors</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
-                    Nutritional Database
-                  </h4>
-                  <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                    <li>• USDA Food Data Central</li>
-                    <li>• Peer-reviewed nutrition studies</li>
-                    <li>• Macro-nutrient optimization algorithms</li>
-                    <li>• Cultural dietary preferences</li>
-                  </ul>
-                </div>
               </div>
             </div>
           </div>
@@ -333,7 +303,7 @@ export default function AboutPage({ context }: AboutPageProps) {
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
               Join thousands of users who trust our evidence-based approach to nutrition planning.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to={context.user ? '/results' : '/profile'}

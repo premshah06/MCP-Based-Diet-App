@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import asyncio
+import aiohttp
 import json
 import os
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import logging
-import requests
+import traceback
+from contextlib import asynccontextmanager
 from mcp.server import Server
 from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
@@ -22,26 +24,60 @@ from mcp.types import (
     ReadResourceRequest,
 )
 from pydantic import BaseModel, Field
-# Setup logging
-logging.basicConfig(level=logging.INFO)
+# Setup enhanced logging with more detailed output
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.StreamHandler(sys.stderr)
+    ]
+)
 logger = logging.getLogger(__name__)
+
+# Set specific logger levels for better debugging
+logging.getLogger("requests").setLevel(logging.DEBUG)
+logging.getLogger("urllib3").setLevel(logging.DEBUG)
+logging.getLogger("mcp").setLevel(logging.DEBUG)
 # Configuration
 API_BASE_URL = os.getenv("DIET_API_URL", "http://diet-api:8000")
-FOODS_PATH = Path(__file__).parent.parent.parent / "foods.json"
-# Load foods database for resource with better error handling
-try:
-    with open(FOODS_PATH, 'r', encoding='utf-8') as f:
-        FOODS_DATA = json.load(f)
-    logger.info(f"Loaded {len(FOODS_DATA.get('foods', []))} foods from {FOODS_PATH}")
-except FileNotFoundError:
-    logger.warning(f"Foods database not found at {FOODS_PATH}, using empty dataset")
-    FOODS_DATA = {"foods": []}
-except json.JSONDecodeError as e:
-    logger.error(f"Invalid JSON in foods database: {e}")
-    FOODS_DATA = {"foods": []}
-except Exception as e:
-    logger.error(f"Error loading foods database: {e}")
-    FOODS_DATA = {"foods": []}
+FOODS_PATHS = [
+    Path("/app/data/enhanced_foods.json"),
+    Path("/app/data/foods.json"),
+    Path("../diet-api/data/enhanced_foods.json"),
+    Path("../diet-api/data/foods.json"),
+    Path("apps/diet-api/data/enhanced_foods.json"),
+    Path("apps/diet-api/data/foods.json"),
+    Path("foods.json"),
+    Path("enhanced_foods.json")
+]
+
+# Global session for HTTP requests
+http_session: Optional[aiohttp.ClientSession] = None
+
+def load_foods_database() -> Dict[str, Any]:
+    """Load foods database with multiple fallback paths"""
+    for foods_path in FOODS_PATHS:
+        try:
+            with open(foods_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            logger.info(f"✅ Loaded {len(data.get('foods', []))} foods from {foods_path}")
+            return data
+        except FileNotFoundError:
+            logger.debug(f"Foods database not found at {foods_path}")
+            continue
+        except json.JSONDecodeError as e:
+            logger.error(f"Invalid JSON in foods database at {foods_path}: {e}")
+            continue
+        except Exception as e:
+            logger.error(f"Error loading foods database from {foods_path}: {e}")
+            continue
+    
+    logger.warning("No foods database found in any fallback path, using empty dataset")
+    return {"foods": []}
+
+# Load foods database with fallback paths
+FOODS_DATA = load_foods_database()
 # Server instance
 server = Server("diet-coach-mcp")
 # Tool schemas
@@ -65,6 +101,16 @@ class ExplainPlanArgs(BaseModel):
     fat_g: Optional[float] = Field(default=None, description="Daily fat target in grams") 
     carbs_g: Optional[float] = Field(default=None, description="Daily carbohydrate target in grams")
     constraints: Optional[str] = Field(default=None, description="Additional constraints or context")
+
+
+class GroceryListArgs(BaseModel):
+    meal_plan: Dict[str, Any] = Field(description="The complete meal plan object")
+    budget: Optional[str] = Field(default="moderate", description="Budget preference: 'low', 'moderate', 'high'")
+
+
+class GenerateRecipeArgs(BaseModel):
+    meal: Dict[str, Any] = Field(description="The specific meal object from the plan")
+    constraints: Optional[str] = Field(default=None, description="User dietary restrictions or context")
 # Tool definitions
 @server.list_tools()
 async def handle_list_tools() -> List[Tool]:
@@ -84,6 +130,16 @@ async def handle_list_tools() -> List[Tool]:
             name="explain_plan",
             description="Get detailed explanation and rationale for nutrition recommendations and meal plans",
             inputSchema=ExplainPlanArgs.model_json_schema()
+        ),
+        Tool(
+            name="grocery_list",
+            description="Generate a consolidated, categorized grocery shopping list from a meal plan",
+            inputSchema=GroceryListArgs.model_json_schema()
+        ),
+        Tool(
+            name="generate_recipe",
+            description="Generate detailed step-by-step cooking instructions and tips for a specific meal",
+            inputSchema=GenerateRecipeArgs.model_json_schema()
         )
     ]
 # Resource definitions
@@ -105,45 +161,96 @@ async def handle_read_resource(request: ReadResourceRequest) -> str:
         return json.dumps(FOODS_DATA, indent=2)
     else:
         raise ValueError(f"Unknown resource: {request.uri}")
+# Session management
+@asynccontextmanager
+async def get_http_session():
+    """Get or create HTTP session with proper cleanup"""
+    global http_session
+    if http_session is None or http_session.closed:
+        timeout = aiohttp.ClientTimeout(total=30, connect=10)
+        http_session = aiohttp.ClientSession(
+            timeout=timeout,
+            headers={'Content-Type': 'application/json'},
+            connector=aiohttp.TCPConnector(limit=10, limit_per_host=5)
+        )
+    try:
+        yield http_session
+    except Exception:
+        # Session will be cleaned up in main() if needed
+        raise
+
+async def cleanup_session():
+    """Clean up HTTP session"""
+    global http_session
+    if http_session and not http_session.closed:
+        await http_session.close()
+        http_session = None
+
 # Tool implementations
 async def make_api_request(endpoint: str, method: str = "GET", data: Optional[Dict] = None) -> Dict[str, Any]:
-    """Make HTTP request to the diet API with improved error handling"""
+    """Make async HTTP request to the diet API with comprehensive error handling"""
     url = f"{API_BASE_URL}{endpoint}"
+    
     try:
-        logger.info(f"Making {method} request to {url}")
-        if method == "POST":
-            response = requests.post(url, json=data, timeout=30)
-        else:
-            params = data if data else {}
-            response = requests.get(url, params=params, timeout=30)
-        logger.info(f"API response status: {response.status_code}")
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.ConnectionError as e:
-        logger.error(f"Connection error to {url}: {e}")
-        raise Exception(f"Could not connect to diet API at {API_BASE_URL}. Make sure the diet-api service is running and accessible.")
-    except requests.exceptions.Timeout as e:
-        logger.error(f"Timeout error for {url}: {e}")
+        logger.info(f"🌐 Making {method} request to {url}")
+        
+        async with get_http_session() as session:
+            if method.upper() == "POST":
+                async with session.post(url, json=data) as response:
+                    response_text = await response.text()
+                    logger.info(f"📡 API response status: {response.status}")
+                    
+                    if response.status == 200:
+                        return await response.json()
+                    elif response.status == 422:
+                        try:
+                            error_data = await response.json()
+                            error_detail = error_data.get('detail', 'Validation error')
+                        except:
+                            error_detail = 'Validation error - unable to parse response'
+                        raise Exception(f"Invalid input parameters: {error_detail}")
+                    else:
+                        raise Exception(f"Diet API error ({response.status}): {response_text}")
+            else:  # GET
+                params = data if data else {}
+                async with session.get(url, params=params) as response:
+                    response_text = await response.text()
+                    logger.info(f"📡 API response status: {response.status}")
+                    
+                    if response.status == 200:
+                        return await response.json()
+                    elif response.status == 422:
+                        try:
+                            error_data = await response.json()
+                            error_detail = error_data.get('detail', 'Validation error')
+                        except:
+                            error_detail = 'Validation error - unable to parse response'
+                        raise Exception(f"Invalid input parameters: {error_detail}")
+                    else:
+                        raise Exception(f"Diet API error ({response.status}): {response_text}")
+                        
+    except asyncio.TimeoutError:
+        logger.error(f"⏰ Timeout error for {url}")
         raise Exception("Request to diet API timed out. The service may be overloaded.")
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"HTTP error for {url}: {e}")
-        if e.response.status_code == 422:
-            try:
-                error_detail = e.response.json().get('detail', 'Validation error')
-            except:
-                error_detail = 'Validation error - unable to parse response'
-            raise Exception(f"Invalid input parameters: {error_detail}")
-        else:
-            raise Exception(f"Diet API error ({e.response.status_code}): {e.response.text}")
+    except aiohttp.ClientConnectorError as e:
+        logger.error(f"🔌 Connection error to {url}: {e}")
+        raise Exception(f"Could not connect to diet API at {API_BASE_URL}. Make sure the diet-api service is running and accessible.")
+    except aiohttp.ClientError as e:
+        logger.error(f"🚫 Client error for {url}: {e}")
+        raise Exception(f"HTTP client error: {str(e)}")
     except json.JSONDecodeError as e:
-        logger.error(f"JSON decode error for {url}: {e}")
+        logger.error(f"🔧 JSON decode error for {url}: {e}")
         raise Exception("Invalid JSON response from diet API")
     except Exception as e:
-        logger.error(f"Unexpected error for {url}: {e}")
+        logger.error(f"💥 Unexpected error for {url}: {e}")
+        logger.error(f"💥 Traceback: {traceback.format_exc()}")
         raise Exception(f"Unexpected error calling diet API: {str(e)}")
 @server.call_tool()
 async def handle_call_tool(request: CallToolRequest) -> List[TextContent]:
     """Handle MCP tool calls"""
+    logger.debug(f"🔧 Tool call received: {request.name}")
+    logger.debug(f"🔧 Tool arguments: {request.arguments}")
+    
     try:
         if request.name == "calculate_calories":
             # Validate arguments
@@ -221,51 +328,144 @@ These targets are calculated using the Mifflin-St Jeor equation for BMR and adju
 {result['explanation']}
 *This explanation considers your specific calorie and macro targets along with any dietary constraints you've mentioned. Use this guidance to better understand your nutrition plan and make informed adjustments as needed.*"""
             return [TextContent(type="text", text=response_text)]
+        elif request.name == "grocery_list":
+            args = GroceryListArgs.model_validate(request.arguments)
+            payload = {
+                "meal_plan": args.meal_plan,
+                "preferences": {"budget": args.budget}
+            }
+            result = await make_api_request("/ai/grocery-list", "POST", payload)
+            
+            gl = result['grocery_list']
+            response_text = f"## 🛒 Smart Grocery List\n\n"
+            for category in gl['categories']:
+                response_text += f"### {category['icon']} {category['name']}\n"
+                for item in category['items']:
+                    line = f"- [ ] **{item['name']}**: {item['quantity']} {item['unit']}"
+                    if item.get('notes'): line += f" ({item['notes']})"
+                    response_text += line + "\n"
+                response_text += "\n"
+            
+            response_text += "### 💡 Shopping Tips\n"
+            for tip in gl['shopping_tips']:
+                response_text += f"- {tip}\n"
+            
+            return [TextContent(type="text", text=response_text)]
+        elif request.name == "generate_recipe":
+            args = GenerateRecipeArgs.model_validate(request.arguments)
+            payload = {
+                "meal": args.meal,
+                "context": {"constraints": args.constraints} if args.constraints else {}
+            }
+            result = await make_api_request("/ai/recipe", "POST", payload)
+            
+            r = result['recipe']
+            response_text = f"# 🍳 {r['title']}\n"
+            response_text += f"**⏱️ Prep:** {r['prep_time']} | **🔥 Cook:** {r['cook_time']} | **📊 Difficulty:** {r['difficulty']}\n\n"
+            
+            response_text += "## 🧂 Ingredients\n"
+            for ing in r['ingredients']:
+                response_text += f"- {ing['name']}: {ing['amount']}\n"
+            
+            response_text += "\n## 🥣 Instructions\n"
+            for i, step in enumerate(r['instructions'], 1):
+                response_text += f"{i}. {step}\n"
+            
+            response_text += "\n## 💡 Chef's Tips\n"
+            for tip in r['tips']:
+                response_text += f"- {tip}\n"
+                
+            return [TextContent(type="text", text=response_text)]
         else:
             raise ValueError(f"Unknown tool: {request.name}")
     except Exception as e:
-        error_text = f"Error executing {request.name}: {str(e)}"
+        logger.error(f"❌ Tool execution error for {request.name}: {str(e)}")
+        logger.error(f"❌ Full error details: {type(e).__name__}: {e}")
+        import traceback
+        logger.error(f"❌ Traceback: {traceback.format_exc()}")
+        
+        error_text = f"Error executing {request.name}: {str(e)}\n\nThis is likely due to:\n1. API connection issues\n2. Invalid input parameters\n3. Service dependencies not running\n\nPlease check the logs for more details."
         return [TextContent(type="text", text=error_text)]
+async def health_check() -> bool:
+    """Perform comprehensive health check"""
+    logger.info("🏥 Performing health check...")
+    
+    # Check foods data availability
+    foods_count = len(FOODS_DATA.get("foods", []))
+    if foods_count == 0:
+        logger.warning("⚠️ No foods data available - this may affect functionality")
+    else:
+        logger.info(f"✅ Foods database loaded with {foods_count} items")
+    
+    # Test API connectivity (async, non-blocking)
+    api_healthy = False
+    try:
+        async with get_http_session() as session:
+            async with session.get(f"{API_BASE_URL}/health") as response:
+                if response.status == 200:
+                    logger.info("✅ Diet API is accessible")
+                    api_healthy = True
+                else:
+                    logger.warning(f"⚠️ Diet API health check failed: {response.status}")
+    except Exception as e:
+        logger.warning(f"⚠️ Could not reach Diet API: {e} - will retry during actual requests")
+    
+    logger.info(f"🏥 Health check completed - Foods: {'✅' if foods_count > 0 else '⚠️'}, API: {'✅' if api_healthy else '⚠️'}")
+    return foods_count > 0 and api_healthy
+
 async def main():
-    """Run the MCP server with improved error handling and health checks"""
-    logger.info("Starting Diet Coach MCP server...")
-    # Basic health check
+    """Run the MCP server with enhanced async handling and proper cleanup"""
+    logger.info("🚀 Starting Diet Coach MCP server...")
+    logger.debug(f"🔧 API Base URL: {API_BASE_URL}")
+    logger.debug(f"🔧 Foods Paths: {[str(p) for p in FOODS_PATHS]}")
+    logger.debug(f"🔧 Python version: {sys.version}")
+    
     try:
-        logger.info("Performing initial health check...")
-        # Check if foods data is available
-        if not FOODS_DATA.get("foods"):
-            logger.warning("No foods data available - this may affect functionality")
-        # Test API connectivity (optional, non-blocking)
-        try:
-            test_response = requests.get(f"{API_BASE_URL}/health", timeout=5)
-            if test_response.status_code == 200:
-                logger.info("Diet API is accessible")
-            else:
-                logger.warning(f"Diet API health check failed: {test_response.status_code}")
-        except:
-            logger.warning("Could not reach Diet API - will retry during actual requests")
-        logger.info("Health check completed")
-    except Exception as e:
-        logger.warning(f"Health check failed: {e} - continuing with startup")
-    try:
-        logger.info("Initializing MCP server with stdio transport...")
+        # Perform health check
+        await health_check()
+        
+        # Initialize MCP server
+        logger.info("🔌 Initializing MCP server with stdio transport...")
+        
         async with stdio_server() as (read_stream, write_stream):
-            logger.info("MCP server running successfully")
-            await server.run(
-                read_stream,
-                write_stream,
-                InitializationOptions(
-                    server_name="diet-coach-mcp",
-                    server_version="1.0.1",
-                ),
-            )
+            logger.info("✅ MCP server running successfully")
+            logger.info("🎯 Available tools: calculate_calories, meal_plan, explain_plan")
+            logger.info("📚 Available resources: file://diet/foods")
+            
+            try:
+                await server.run(
+                    read_stream,
+                    write_stream,
+                    InitializationOptions(
+                        server_name="diet-coach-mcp",
+                        server_version="2.0.0",
+                    ),
+                )
+            except asyncio.CancelledError:
+                logger.info("🛑 MCP server cancelled")
+                raise
+            except Exception as e:
+                logger.error(f"❌ MCP server runtime error: {e}")
+                logger.error(f"❌ Traceback: {traceback.format_exc()}")
+                raise
+                
     except KeyboardInterrupt:
-        logger.info("MCP server stopped by user")
+        logger.info("🛑 MCP server stopped by user")
     except Exception as e:
-        logger.error(f"MCP Server error: {e}")
+        logger.error(f"💥 MCP Server error: {e}")
+        logger.error(f"💥 Full traceback: {traceback.format_exc()}")
         print(f"MCP Server initialization error: {e}", file=sys.stderr)
-        # For debugging, keep container alive for a bit but don't loop forever
-        logger.info("Container will remain active for 5 minutes for debugging")
-        await asyncio.sleep(300)  # 5 minutes instead of infinite loop
+        
+        # Keep container alive briefly for debugging, but not indefinitely
+        logger.info("🐛 Container will remain active for debugging (60 seconds)")
+        await asyncio.sleep(60)
+    finally:
+        # Cleanup resources
+        logger.info("🧹 Cleaning up resources...")
+        try:
+            await cleanup_session()
+            logger.info("✅ Resource cleanup completed")
+        except Exception as e:
+            logger.error(f"❌ Error during cleanup: {e}")
 if __name__ == "__main__":
     asyncio.run(main())

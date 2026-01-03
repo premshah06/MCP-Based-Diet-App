@@ -13,14 +13,22 @@ services:
       - "0.0.0.0:3000:3000"
     environment:
       - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000
+      - VITE_API_BASE_URL=http://localhost:8000
+      - VITE_APP_VERSION=2.0.0
+      - VITE_ENABLE_PWA=true
+      - VITE_ENABLE_ANALYTICS=false
     volumes:
-      - ../foods.json:/usr/share/nginx/html/foods.json:ro
+      # Make enhanced dataset available to frontend
+      - ../apps/diet-api/data/enhanced_foods.json:/usr/share/nginx/html/enhanced_foods.json:ro
+      # Keep backward compatibility
+      - ../apps/diet-api/data/foods.json:/usr/share/nginx/html/foods.json:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/health", "||", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/", "||", "exit", "1" ]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 15s
     restart: unless-stopped
     networks:
       - diet-network
@@ -38,20 +46,36 @@ services:
     environment:
       - API_HOST=0.0.0.0
       - API_PORT=8000
-      - OLLAMA_URL=http://ollama:11434
+      - FOODS_DATABASE_PATH=/app/foods.json
+      - API_VERSION=2.0.0
+      - ENABLE_CORS=true
+      - ENABLE_DETAILED_LOGGING=true
+      # Authentication
+      - SECRET_KEY=${SECRET_KEY:-diet-coach-super-secret-key-change-in-production-2024}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-1440}
+      - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-30}
+      # AI Service (optional - set in .env file)
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
     volumes:
-      - ../foods.json:/app/foods.json:ro
+      # Primary enhanced dataset for comprehensive nutrition data
+      - ../apps/diet-api/data/enhanced_foods.json:/app/data/enhanced_foods.json:ro
+      # Fallback simple dataset for compatibility
+      - ../apps/diet-api/data/foods.json:/app/data/foods.json:ro
+      # User data persistence
+      - api-user-data:/app/users:rw
+      # Research data directory for future expansion
+      - api-research-data:/app/research_data:rw
+      # Logs for monitoring and debugging
+      - api-logs:/app/logs:rw
     networks:
       - diet-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
-    depends_on:
-      - ollama
 
   diet-mcp:
     build:
@@ -60,77 +84,37 @@ services:
     container_name: diet-mcp
     environment:
       - DIET_API_URL=http://diet-api:8000
+      - FOODS_DATABASE_PATH=/app/foods.json
+      - LOG_LEVEL=INFO
+      - ENABLE_RESEARCH_MODE=true
+      - DATA_VALIDATION_LEVEL=strict
     volumes:
-      - ../foods.json:/app/foods.json:ro
+      # Primary enhanced dataset
+      - ../apps/diet-api/data/enhanced_foods.json:/app/data/enhanced_foods.json:ro
+      # Fallback simple dataset
+      - ../apps/diet-api/data/foods.json:/app/data/foods.json:ro
+      # Logs directory for debugging
+      - mcp-logs:/app/logs:rw
     networks:
       - diet-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "/healthcheck.sh"]
+      test: [ "CMD", "python", "-c", "import sys; sys.exit(0)" ]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 15s
     depends_on:
       diet-api:
         condition: service_healthy
 
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports:
-      - "0.0.0.0:11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-    networks:
-      - diet-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    environment:
-      - OLLAMA_HOST=0.0.0.0
-    # GPU support (uncomment if you have NVIDIA GPU)
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
-
-  # Model initialization container - pulls a small free model
-  ollama-init:
-    image: ollama/ollama:latest
-    container_name: ollama-init
-    volumes:
-      - ollama-data:/root/.ollama
-    networks:
-      - diet-network
-    depends_on:
-      ollama:
-        condition: service_healthy
-    restart: "no"
-    entrypoint: ["/bin/bash"]
-    command: >
-      -c "
-        echo 'Setting OLLAMA_HOST...' &&
-        export OLLAMA_HOST=http://ollama:11434 &&
-        echo 'Waiting for OLLAMA service...' &&
-        sleep 10 &&
-        echo 'Pulling phi3:mini model (lightweight and fast)...' &&
-        ollama pull phi3:mini &&
-        echo 'Model phi3:mini successfully pulled!' &&
-        echo 'Testing model...' &&
-        echo 'What is protein?' | ollama run phi3:mini --format json ||
-        echo 'Model pull completed (may need manual verification)'
-      "
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-
 volumes:
-  ollama-data:
+  # Research and debugging volumes
+  api-research-data:
+    driver: local
+  api-logs:
+    driver: local
+  api-user-data:
+    driver: local
+  mcp-logs:
     driver: local

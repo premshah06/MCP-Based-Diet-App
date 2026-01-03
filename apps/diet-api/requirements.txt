@@ -1,5 +1,25 @@
+# Core FastAPI
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
+
+# HTTP client
 requests==2.31.0
+aiohttp==3.9.1
+
+# Form handling
 python-multipart==0.0.6
+
+# Data processing
+pandas==2.1.4
+openpyxl==3.1.2
+
+# AI Services (optional - will use fallback if not available)
+openai==1.6.1
+
+# For async operations
+anyio>=3.7.1,<4.0.0
+
+# Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4

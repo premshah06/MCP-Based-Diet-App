@@ -4,20 +4,22 @@ import { motion } from 'framer-motion';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import toast from 'react-hot-toast';
-import { 
-  ArrowRight, 
-  Target, 
-  Flame, 
-  TrendingUp, 
+import {
+  ArrowRight,
+  Target,
+  Flame,
+  TrendingUp,
   Info,
   RefreshCw,
-  Download
+  Download,
+  User,
+  Calendar
 } from 'lucide-react';
 
 import { dietAPI, transformTDEEToMealPlan } from '@/services/api';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { MACRO_COLORS, GOALS, ACTIVITY_LEVELS, DIET_TAGS } from '@/utils/constants';
+import { MACRO_COLORS, GOALS, ACTIVITY_LEVELS } from '@/utils/constants';
 import { formatCalories, formatMacro, calculateMacroPercentages, downloadJSON } from '@/utils/helpers';
 import type { AppState } from '@/types/api';
 
@@ -56,7 +58,7 @@ export default function ResultsPage({ context }: ResultsPageProps) {
 
   const loadExplanation = async () => {
     if (!tdee) return;
-    
+
     try {
       setLoadingExplanation(true);
       const response = await dietAPI.explainNutrition({
@@ -81,14 +83,14 @@ export default function ResultsPage({ context }: ResultsPageProps) {
 
     try {
       context.setLoading(true);
-      
+
       const mealPlanRequest = transformTDEEToMealPlan(tdee, {
         days: 7,
         diet_tags: user.diet_preferences || []
       });
 
       const mealPlan = await dietAPI.generateMealPlan(mealPlanRequest);
-      
+
       context.updateNutritionResults({
         ...nutrition,
         mealPlan
@@ -96,7 +98,7 @@ export default function ResultsPage({ context }: ResultsPageProps) {
 
       toast.success('Meal plan generated successfully!');
       navigate('/meal-plan');
-      
+
     } catch (error) {
       console.error('Failed to generate meal plan:', error);
       context.setError(error instanceof Error ? error.message : 'Failed to generate meal plan');
@@ -107,14 +109,14 @@ export default function ResultsPage({ context }: ResultsPageProps) {
 
   const exportData = () => {
     if (!user || !tdee) return;
-    
+
     const exportData = {
       profile: user,
       nutrition: tdee,
       explanation,
       timestamp: new Date().toISOString()
     };
-    
+
     downloadJSON(exportData, `diet-coach-results-${new Date().toISOString().split('T')[0]}`);
     toast.success('Results exported successfully!');
   };
@@ -401,82 +403,65 @@ export default function ResultsPage({ context }: ResultsPageProps) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="card"
+              className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm"
             >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Profile Summary
+              <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">
+                System Profile
               </h3>
-              
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Sex:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {user.sex === 'male' ? '👨 Male' : '👩 Female'}
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-2xl">
+                  <div className="flex items-center gap-3">
+                    <User className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-bold text-gray-600 dark:text-gray-400">Sex</span>
+                  </div>
+                  <span className="text-sm font-black text-gray-900 dark:text-gray-100 uppercase tracking-tight">
+                    {user.sex}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Age:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {user.age} years
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-2xl">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-bold text-gray-600 dark:text-gray-400">Age</span>
+                  </div>
+                  <span className="text-sm font-black text-gray-900 dark:text-gray-100">
+                    {user.age} Yrs
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Height:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {user.height_cm} cm
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-2xl">
+                  <div className="flex items-center gap-3">
+                    <TrendingUp className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-bold text-gray-600 dark:text-gray-400">Activity</span>
+                  </div>
+                  <span className="text-sm font-black text-gray-900 dark:text-gray-100">
+                    {currentActivity?.label}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Weight:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {user.weight_kg} kg
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Activity:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {currentActivity?.icon} {currentActivity?.label}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Goal:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {currentGoal?.icon} {currentGoal?.label}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Diet:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {user.diet_preferences && user.diet_preferences.length > 0 ? (
-                      <div className="flex flex-wrap gap-1">
-                        {user.diet_preferences.map((pref) => {
-                          const tag = DIET_TAGS.find(t => t.value === pref);
-                          return tag ? (
-                            <span key={pref} className="text-xs">
-                              {tag.icon}
-                            </span>
-                          ) : null;
-                        })}
-                      </div>
-                    ) : (
-                      'No preferences set'
-                    )}
+                <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-2xl border border-primary-100 dark:border-primary-800/50">
+                  <div className="flex items-center gap-3">
+                    <Target className="w-4 h-4 text-primary-500" />
+                    <span className="text-sm font-bold text-primary-700 dark:text-primary-300">Objective</span>
+                  </div>
+                  <span className="text-sm font-black text-primary-600 dark:text-primary-400 uppercase">
+                    {currentGoal?.label}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">BMR:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {formatCalories(tdee.bmr)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">TDEE:</span>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
-                    {formatCalories(tdee.tdee)}
-                  </span>
+              <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Basal Metabolic</div>
+                    <div className="text-lg font-black text-gray-900 dark:text-white">
+                      {Math.round(tdee.bmr)} <span className="text-[10px] text-gray-400 uppercase">kcal</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Daily</div>
+                    <div className="text-lg font-black text-primary-600 dark:text-primary-400">
+                      {Math.round(tdee.tdee)} <span className="text-[10px] text-gray-400 uppercase">kcal</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -491,7 +476,7 @@ export default function ResultsPage({ context }: ResultsPageProps) {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 Next Steps
               </h3>
-              
+
               <button
                 onClick={generateMealPlan}
                 disabled={context.loading}

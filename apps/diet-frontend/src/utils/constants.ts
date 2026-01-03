@@ -5,35 +5,35 @@ export const ACTIVITY_LEVELS = [
     label: 'Sedentary',
     description: 'Little to no exercise',
     factor: 1.2,
-    icon: '🪑'
+    icon: 'Clock'
   },
   {
     value: 'light',
     label: 'Light Activity',
     description: 'Light exercise 1-3 days/week',
     factor: 1.375,
-    icon: '🚶'
+    icon: 'Activity'
   },
   {
     value: 'moderate',
     label: 'Moderate Activity',
     description: 'Moderate exercise 3-5 days/week',
     factor: 1.55,
-    icon: '🏃'
+    icon: 'Flame'
   },
   {
     value: 'active',
     label: 'Active',
     description: 'Hard exercise 6-7 days/week',
     factor: 1.725,
-    icon: '🏋️'
+    icon: 'Dumbbell'
   },
   {
     value: 'very_active',
     label: 'Very Active',
     description: 'Very hard exercise, physical job',
     factor: 1.9,
-    icon: '💪'
+    icon: 'Zap'
   }
 ] as const;
 
@@ -46,7 +46,7 @@ export const GOALS = [
     adjustment: -0.20,
     color: 'text-red-600',
     bgColor: 'bg-red-50',
-    icon: '📉'
+    icon: 'TrendingDown'
   },
   {
     value: 'maintain',
@@ -55,7 +55,7 @@ export const GOALS = [
     adjustment: 0.0,
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
-    icon: '⚖️'
+    icon: 'MinusCircle'
   },
   {
     value: 'bulk',
@@ -64,7 +64,7 @@ export const GOALS = [
     adjustment: 0.15,
     color: 'text-green-600',
     bgColor: 'bg-green-50',
-    icon: '📈'
+    icon: 'TrendingUp'
   }
 ] as const;
 
@@ -74,42 +74,42 @@ export const DIET_TAGS = [
     value: 'veg',
     label: 'Vegetarian',
     description: 'No meat, fish, or poultry',
-    icon: '🥬',
+    icon: 'Leaf',
     color: 'bg-green-100 text-green-800'
   },
   {
     value: 'non_veg',
     label: 'Non-Vegetarian',
     description: 'Includes meat, fish, and poultry',
-    icon: '🍖',
+    icon: 'Utensils',
     color: 'bg-red-100 text-red-800'
   },
   {
     value: 'vegan',
     label: 'Vegan',
     description: 'No animal products',
-    icon: '🌱',
+    icon: 'Grape',
     color: 'bg-emerald-100 text-emerald-800'
   },
   {
     value: 'halal',
     label: 'Halal',
     description: 'Halal dietary requirements',
-    icon: '☪️',
+    icon: 'ShieldCheck',
     color: 'bg-blue-100 text-blue-800'
   },
   {
     value: 'lactose_free',
     label: 'Lactose Free',
     description: 'No dairy products',
-    icon: '🥛',
+    icon: 'Maximize',
     color: 'bg-yellow-100 text-yellow-800'
   },
   {
     value: 'budget',
     label: 'Budget Friendly',
     description: 'Cost-effective food choices',
-    icon: '💰',
+    icon: 'Coins',
     color: 'bg-purple-100 text-purple-800'
   }
 ] as const;

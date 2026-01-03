@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Home, 
-  User, 
-  BarChart3, 
-  UtensilsCrossed, 
-  Info, 
-  Sun, 
-  Moon, 
+import {
+  Home,
+  User,
+  BarChart3,
+  UtensilsCrossed,
+  Info,
+  Sun,
+  Moon,
   Monitor,
   Menu,
-  X
+  X,
+  Settings,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import { cn } from '@/utils/helpers';
+import { useAccessibility } from './AccessibilityProvider';
+import AccessibilityPanel from './AccessibilityPanel';
+import { AuthModal } from './AuthModal';
+import { useAuth } from '@/hooks/useAuth';
 import type { AppState, Theme } from '@/types/api';
 
 interface LayoutProps {
@@ -26,22 +33,26 @@ interface LayoutProps {
 
 export default function Layout({ children, context }: LayoutProps) {
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [accessibilityPanelOpen, setAccessibilityPanelOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const { settings } = useAccessibility();
+  const { user: authUser, isAuthenticated, logout } = useAuth();
 
   const navigation = [
     { name: 'Home', href: '/', icon: Home, current: location.pathname === '/' },
     { name: 'Profile', href: '/profile', icon: User, current: location.pathname === '/profile' },
-    { 
-      name: 'Results', 
-      href: '/results', 
-      icon: BarChart3, 
+    {
+      name: 'Results',
+      href: '/results',
+      icon: BarChart3,
       current: location.pathname === '/results',
       disabled: !context.nutrition
     },
-    { 
-      name: 'Meal Plan', 
-      href: '/meal-plan', 
-      icon: UtensilsCrossed, 
+    {
+      name: 'Meal Plan',
+      href: '/meal-plan',
+      icon: UtensilsCrossed,
       current: location.pathname === '/meal-plan',
       disabled: !context.nutrition
     },
@@ -87,8 +98,8 @@ export default function Layout({ children, context }: LayoutProps) {
                       item.current
                         ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
                         : item.disabled
-                        ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
+                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
                     )}
                     onClick={(e) => {
                       if (item.disabled) {
@@ -103,14 +114,54 @@ export default function Layout({ children, context }: LayoutProps) {
               })}
             </nav>
 
-            {/* Theme Switcher & Mobile Menu */}
+            {/* Theme Switcher, Accessibility & Mobile Menu */}
             <div className="flex items-center space-x-2">
+              {/* Auth Button */}
+              {isAuthenticated ? (
+                <div className="hidden md:flex items-center space-x-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {authUser?.name}
+                  </span>
+                  <button
+                    onClick={logout}
+                    className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+                    aria-label="Sign out"
+                    title="Sign out"
+                  >
+                    <LogOut className="w-5 h-5" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setAuthModalOpen(true)}
+                  className="hidden md:flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium bg-primary-500 hover:bg-primary-600 text-white transition-colors"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Sign In</span>
+                </button>
+              )}
+
+              {/* Accessibility Settings Button */}
+              <button
+                type="button"
+                onClick={() => setAccessibilityPanelOpen(true)}
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+                aria-label="Open accessibility and cultural settings"
+                title="Accessibility & Cultural Settings"
+              >
+                <Settings className="w-5 h-5" />
+                {settings.culturalPreferences.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary-500 rounded-full"></span>
+                )}
+              </button>
+
               {/* Theme Switcher */}
               <div className="relative">
                 <select
                   value={context.theme}
                   onChange={(e) => context.setTheme(e.target.value as Theme)}
                   className="appearance-none bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  aria-label="Select theme"
                 >
                   {themeOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -132,6 +183,7 @@ export default function Layout({ children, context }: LayoutProps) {
                 type="button"
                 className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
                 {mobileMenuOpen ? (
                   <X className="w-6 h-6" />
@@ -163,8 +215,8 @@ export default function Layout({ children, context }: LayoutProps) {
                       item.current
                         ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
                         : item.disabled
-                        ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     )}
                     onClick={(e) => {
                       if (item.disabled) {
@@ -179,6 +231,33 @@ export default function Layout({ children, context }: LayoutProps) {
                   </Link>
                 );
               })}
+
+              {/* Mobile Auth Button */}
+              <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+                {isAuthenticated ? (
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Sign Out ({authUser?.name})</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setAuthModalOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium bg-primary-500 text-white w-full"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    <span>Sign In</span>
+                  </button>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
@@ -198,28 +277,58 @@ export default function Layout({ children, context }: LayoutProps) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              © 2024 Diet Coach. Powered by AI nutrition science.
+      <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 mt-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <div className="flex items-center space-x-2">
+                <div className="w-6 h-6 bg-primary-500 rounded flex items-center justify-center">
+                  <UtensilsCrossed className="w-3.5 h-3.5 text-white" />
+                </div>
+                <span className="font-bold text-gray-900 dark:text-gray-100 italic">Diet Coach</span>
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                © {new Date().getFullYear()} Diet Coach. Advanced AI Nutrition Analysis.
+              </p>
             </div>
-            <div className="flex items-center space-x-4">
+
+            <div className="flex items-center space-x-6">
               {context.user && (
-                <button
-                  onClick={context.clearData}
-                  className="text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                >
-                  Clear Data
-                </button>
+                <div className="flex items-center space-x-2 px-3 py-1.5 bg-gray-50 dark:bg-gray-800 rounded-full border border-gray-100 dark:border-gray-700">
+                  <User className="w-4 h-4 text-primary-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                    {authUser?.name || (context.user.sex === 'male' ? 'Mr. User' : 'Ms. User')}
+                  </span>
+                </div>
               )}
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {context.user ? `Welcome, ${context.user.sex === 'male' ? '👨' : '👩'}` : 'Ready to start?'}
+              <div className="flex items-center space-x-4">
+                {context.user && (
+                  <button
+                    onClick={context.clearData}
+                    className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    Reset System
+                  </button>
+                )}
+                <div className="h-4 w-px bg-gray-200 dark:bg-gray-700" />
+                <span className="text-xs text-gray-400 font-medium">v2.1.0</span>
               </div>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Accessibility Panel */}
+      <AccessibilityPanel
+        isOpen={accessibilityPanelOpen}
+        onClose={() => setAccessibilityPanelOpen(false)}
+      />
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
     </div>
   );
 }
